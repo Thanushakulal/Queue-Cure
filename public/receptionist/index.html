@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receptionist Dashboard - Queue Cure '26</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="dashboard-header">
+    <div class="header-logo" onclick="window.location.href='../'">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 10.5V20H5V4h9v5.5h5M14 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-7-7m-1 9h-2v2h2v-2m0 4h-2v2h2v-2m3-4h-2v2h2v-2m0 4h-2v2h2v-2m1.5-7c-.8 0-1.5.7-1.5 1.5S17.7 11 18.5 11 20 10.3 20 9.5 19.3 8 18.5 8Z"/>
+      </svg>
+      <h1>Queue Cure '26</h1>
+      <span class="header-badge">Receptionist Portal</span>
+    </div>
+    
+    <div class="header-actions">
+      <button id="btn-toggle-demo" class="btn-secondary btn-demo-mode">
+        <span class="demo-icon">⚡</span> Setup Demo Mode
+      </button>
+      <div class="sync-badge">
+        <div id="sync-dot" class="sync-dot"></div>
+        <span id="sync-text">Connecting sync...</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="demo-banner" class="demo-banner-strip hidden">
+    <span>⚡ HACKATHON DEMO MODE ACTIVE - Simulating clinic flow (new registrations & call cycles) ⚡</span>
+    <button id="btn-stop-demo-banner" class="btn-demo-stop-mini">Stop Simulation</button>
+  </div>
+
+  <div class="dashboard-container">
+    <!-- Row 1: Statistics Cards -->
+    <section class="stats-grid">
+      <div class="glass-card stat-card" id="stat-current">
+        <div class="stat-icon icon-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Now Serving</span>
+          <h2 class="stat-value" id="val-current-serving">-</h2>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card" id="stat-waiting">
+        <div class="stat-icon icon-amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Waiting Patients</span>
+          <h2 class="stat-value" id="val-waiting-count">0</h2>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card" id="stat-completed">
+        <div class="stat-icon icon-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Completed Today</span>
+          <h2 class="stat-value" id="val-completed-count">0</h2>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card" id="stat-total">
+        <div class="stat-icon icon-teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Total Patients Registered</span>
+          <h2 class="stat-value" id="val-total-count">0</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Workspace Grid -->
+    <main class="dashboard-main">
+      <!-- Left Controls Panel -->
+      <div class="control-panel">
+        
+        <!-- Large Action: Call Next -->
+        <div class="glass-card main-action-card">
+          <h3>Serving Operations</h3>
+          <p class="panel-subtitle">Advance the queue, notify patients in the waiting area, or recall previous tokens.</p>
+          
+          <button id="btn-call-next" class="btn-primary btn-mega">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>CALL NEXT PATIENT</span>
+          </button>
+          
+          <div class="serving-actions-row">
+            <button id="btn-recall-prev" class="btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 2v6h6"></path>
+                <path d="M2.5 12a9 9 0 1 1 .75 3.5"></path>
+              </svg>
+              Recall Previous
+            </button>
+            <button id="btn-complete-active" class="btn-success" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Complete Current
+            </button>
+          </div>
+
+          <div id="active-callout" class="active-serving-callout hidden">
+            <div class="callout-header">NOW CALLING</div>
+            <div class="callout-token" id="callout-token-num">Token #--</div>
+            <div class="callout-name" id="callout-patient-name">No active patient</div>
+          </div>
+        </div>
+
+        <!-- Add Patient Form -->
+        <div class="glass-card form-card">
+          <h3>Add Patient Registration</h3>
+          <p class="panel-subtitle">Register a new patient into the database. A sequential token number will be generated.</p>
+          
+          <form id="form-add-patient">
+            <div class="form-group">
+              <label for="patient-name">Patient Name <span class="required">*</span></label>
+              <input type="text" id="patient-name" placeholder="Enter patient's full name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="patient-phone">Phone Number <span class="note">(Optional)</span></label>
+              <input type="tel" id="patient-phone" placeholder="e.g. +1 555-0199">
+            </div>
+
+            <button type="submit" class="btn-primary w-full">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add to Queue
+            </button>
+          </form>
+        </div>
+
+        <!-- Settings Controller -->
+        <div class="glass-card settings-card">
+          <h3>Queue settings</h3>
+          <p class="panel-subtitle">Update parameters to recalculate estimated wait times dynamically across patient screens.</p>
+          
+          <div class="form-group">
+            <label for="consult-time">Average Consultation Time (Minutes)</label>
+            <div class="settings-input-row">
+              <input type="number" id="consult-time" min="1" max="120" value="5">
+              <button id="btn-save-settings" class="btn-secondary">Save</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Queue List Table -->
+      <div class="queue-panel glass-card">
+        <div class="panel-header">
+          <div>
+            <h3>Active Queue Management</h3>
+            <p class="panel-subtitle">Live list of waiting patients. Actions below trigger instant updates to waiting screens.</p>
+          </div>
+          <span id="queue-empty-msg" class="badge badge-completed hidden">All caught up!</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="queue-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Token</th>
+                <th>Patient Details</th>
+                <th style="width: 150px;">Status</th>
+                <th style="width: 260px; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="queue-tbody">
+              <!-- Dynamically populated rows -->
+              <tr>
+                <td colspan="4" class="table-loading">Loading queue data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Patient Registration Success Modal -->
+  <div id="registration-modal" class="modal-overlay hidden">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h2>Patient Registered Successfully</h2>
+        <button id="btn-close-modal" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="patient-success-details">
+          <div class="success-icon-wrapper">✓</div>
+          <h3 id="modal-patient-name">John Doe</h3>
+          <p class="modal-token-label">Assigned Token Number</p>
+          <h1 id="modal-token-number">#05</h1>
+          <p class="modal-phone-label" id="modal-patient-phone">Phone: +1 555-0199</p>
+        </div>
+        <hr class="modal-divider">
+        <div class="qr-container-box">
+          <p class="qr-instruction">Scan to track position live on mobile device:</p>
+          <div id="qrcode-display" class="qrcode-wrapper"></div>
+          <p class="qr-url-text" id="modal-qr-url">http://...</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-print-qr" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="margin-right: 4px;">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print Ticket
+        </button>
+        <button id="btn-download-qr" class="btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="margin-right: 4px;">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download QR
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared/qrcode.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard - Queue Cure '26</title>
+  <meta name="description" content="Real-time clinic analytics — patient throughput, wait times, consultation durations, and peak hours.">
+  <link rel="stylesheet" href="../shared/common.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="analytics-header">
+    <div class="header-logo" onclick="window.location.href='../'">
+      <svg viewBox="0 0 24 24"><path d="M19 10.5V20H5V4h9v5.5h5M14 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-7-7m-1 9h-2v2h2v-2m0 4h-2v2h2v-2m3-4h-2v2h2v-2m0 4h-2v2h2v-2m1.5-7c-.8 0-1.5.7-1.5 1.5S17.7 11 18.5 11 20 10.3 20 9.5 19.3 8 18.5 8Z"/></svg>
+      <h1>Queue Cure '26</h1>
+      <span class="header-badge analytics-badge">Analytics</span>
+    </div>
+    <div class="header-right">
+      <div class="period-tabs">
+        <button class="period-tab active" data-period="today">Today</button>
+        <button class="period-tab" data-period="weekly">Weekly</button>
+        <button class="period-tab" data-period="monthly">Monthly</button>
+      </div>
+      <div class="sync-badge">
+        <div id="sync-dot" class="sync-dot"></div>
+        <span id="sync-text">Live</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="analytics-container">
+
+    <!-- KPI Summary Cards -->
+    <section class="kpi-grid">
+      <div class="glass-card kpi-card">
+        <div class="kpi-icon" style="color: var(--teal-400);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="kpi-val" id="kpi-total">--</div>
+        <div class="kpi-label">Total Patients</div>
+      </div>
+      <div class="glass-card kpi-card">
+        <div class="kpi-icon" style="color: var(--mint-400);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="kpi-val" id="kpi-completed">--</div>
+        <div class="kpi-label">Completed</div>
+      </div>
+      <div class="glass-card kpi-card">
+        <div class="kpi-icon" style="color: var(--amber-400);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="kpi-val" id="kpi-completion-rate">--</div>
+        <div class="kpi-label">Completion Rate</div>
+      </div>
+      <div class="glass-card kpi-card">
+        <div class="kpi-icon" style="color: var(--rose-400);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><polyline points="5 12 12 5 19 12"/><polyline points="5 19 12 12 19 19"/></svg>
+        </div>
+        <div class="kpi-val" id="kpi-skipped">--</div>
+        <div class="kpi-label">Skipped</div>
+      </div>
+    </section>
+
+    <!-- Charts Grid -->
+    <section class="charts-grid">
+
+      <!-- Patient Volume Chart -->
+      <div class="glass-card chart-card chart-wide">
+        <div class="chart-header">
+          <div>
+            <h3>Patient Volume</h3>
+            <p class="chart-subtitle">Registrations vs completions over time</p>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-volume"></canvas>
+        </div>
+      </div>
+
+      <!-- Completion vs Skip Doughnut -->
+      <div class="glass-card chart-card">
+        <div class="chart-header">
+          <h3>Outcome Breakdown</h3>
+        </div>
+        <div class="chart-wrapper chart-doughnut-wrapper">
+          <canvas id="chart-outcomes"></canvas>
+        </div>
+        <div id="outcomes-legend" class="outcomes-legend"></div>
+      </div>
+
+      <!-- Average Duration Chart -->
+      <div class="glass-card chart-card">
+        <div class="chart-header">
+          <h3>Avg Consultation Duration</h3>
+          <p class="chart-subtitle">Minutes per session</p>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-duration"></canvas>
+        </div>
+      </div>
+
+      <!-- Average Wait Time Chart -->
+      <div class="glass-card chart-card">
+        <div class="chart-header">
+          <h3>Avg Wait Time</h3>
+          <p class="chart-subtitle">Minutes from registration to consultation</p>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-wait"></canvas>
+        </div>
+      </div>
+
+      <!-- Peak Hours Chart -->
+      <div class="glass-card chart-card chart-wide">
+        <div class="chart-header">
+          <h3>Peak Clinic Hours</h3>
+          <p class="chart-subtitle">Patient registrations by hour of day</p>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-peak"></canvas>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script src="../shared/chart.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

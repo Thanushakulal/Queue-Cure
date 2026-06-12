@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Waiting Room - Queue Cure '26</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="patient-header">
+    <div class="header-logo" onclick="window.location.href='../'">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 10.5V20H5V4h9v5.5h5M14 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-7-7m-1 9h-2v2h2v-2m0 4h-2v2h2v-2m3-4h-2v2h2v-2m0 4h-2v2h2v-2m1.5-7c-.8 0-1.5.7-1.5 1.5S17.7 11 18.5 11 20 10.3 20 9.5 19.3 8 18.5 8Z"/>
+      </svg>
+      <h1>Queue Cure '26</h1>
+      <span class="header-badge">Waiting Room Display</span>
+    </div>
+    
+    <div class="sync-badge">
+      <div id="sync-dot" class="sync-dot"></div>
+      <span id="sync-text">Live Sync Connecting...</span>
+    </div>
+  </header>
+
+  <div class="patient-container">
+    
+    <!-- Hero Callout: Current serving token (Enhanced) -->
+    <section class="glass-card hero-serving-card">
+      <div class="hero-top-row">
+        <div class="hero-header">NOW SERVING</div>
+        <div class="last-called-timer" id="last-called-timer">
+          <div class="last-called-dot"></div>
+          <span id="last-called-text">Waiting for first patient...</span>
+        </div>
+      </div>
+      <div class="hero-serving-num animated-token" id="hero-token-num">--</div>
+      <div class="hero-serving-name" id="hero-patient-name">All caught up! No active consultation.</div>
+      <div class="voice-notification-msg" id="voice-status"></div>
+      <!-- Daily Progress Bar -->
+      <div class="daily-progress-section" id="daily-progress-section">
+        <div class="progress-labels">
+          <span id="progress-label-left">Today's Progress</span>
+          <span id="progress-label-right">0 / 0</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Workspace Grid -->
+    <main class="patient-main-grid">
+      
+      <!-- Left Column: Personal Queue Tracker -->
+      <section class="tracker-column">
+        
+        <!-- Onboarding state: Enter token -->
+        <div class="glass-card tracker-card" id="tracker-onboarding">
+          <h3>Track Your Position</h3>
+          <p class="panel-subtitle">Enter your assigned token number to calculate your position and estimated waiting time in real time.</p>
+          
+          <form id="form-track-token">
+            <div class="form-group">
+              <label for="track-token-input">Your Token Number</label>
+              <input type="number" id="track-token-input" placeholder="e.g. 5" min="1" required>
+            </div>
+            <button type="submit" class="btn-primary w-full btn-track">
+              Track My Token
+            </button>
+          </form>
+        </div>
+
+        <!-- Tracking state: Show details -->
+        <div class="glass-card tracker-card hidden" id="tracker-details">
+          <div class="tracker-header">
+            <h3>Your Token Status</h3>
+            <button id="btn-clear-track" class="btn-clear">Change Token</button>
+          </div>
+          
+          <div class="user-token-display">
+            <span class="user-token-label">YOUR TOKEN</span>
+            <span class="user-token-val" id="track-user-token">#--</span>
+          </div>
+
+          <div class="user-status-card" id="user-status-box">
+            <span class="status-label">Current Status</span>
+            <span class="status-badge-val" id="track-status-val">Waiting</span>
+          </div>
+
+          <div class="wait-stats-grid">
+            <div class="wait-stat-box">
+              <span class="wait-stat-label">Tokens Ahead</span>
+              <span class="wait-stat-val" id="track-tokens-ahead">-</span>
+            </div>
+            
+            <div class="wait-stat-box">
+              <span class="wait-stat-label">Est. Wait Time</span>
+              <span class="wait-stat-val" id="track-wait-time">-</span>
+            </div>
+          </div>
+
+          <div class="tracker-footer" id="tracker-message">
+            Please wait in the reception lobby. We will notify you when it's your turn.
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Queue View -->
+      <section class="queue-column glass-card">
+        <h3>Queue Overview</h3>
+        <p class="panel-subtitle">Live sequence of upcoming tokens and recently served patients.</p>
+
+        <!-- Dynamic Content Lists -->
+        <div class="queue-lists-container">
+          <div class="queue-sub-panel">
+            <h4>Next In Line</h4>
+            <div class="upcoming-grid" id="upcoming-tokens-grid">
+              <!-- Dynamically populated next tokens -->
+              <div class="empty-list-text">No patients waiting</div>
+            </div>
+          </div>
+
+          <div class="queue-sub-panel border-top-divider">
+            <h4>Recent Activity</h4>
+            <div class="history-list" id="history-tokens-list">
+              <!-- Dynamically populated past tokens -->
+              <div class="empty-list-text">No recent activity</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Cure '26 - Smart Clinic Queue Management</title>
+  <meta name="description" content="Queue Cure '26 — a production-grade smart clinic queue management platform with real-time WebSocket sync, QR tracking, Doctor Dashboard, Analytics, and AI wait-time predictions.">
+  <link rel="stylesheet" href="shared/common.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: 
+        radial-gradient(ellipse at top right, rgba(13, 148, 136, 0.18), transparent 50%),
+        radial-gradient(ellipse at bottom left, rgba(56, 189, 248, 0.08), transparent 50%),
+        var(--slate-950);
+      padding: 32px 24px;
+    }
+    .gateway-container {
+      max-width: 1100px;
+      width: 100%;
+      text-align: center;
+    }
+    .header-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+    .header-logo svg {
+      width: 44px; height: 44px;
+      fill: var(--teal-400);
+      filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.5));
+    }
+    .header-logo h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--teal-400);
+      letter-spacing: -0.02em;
+    }
+    .app-title {
+      font-size: 3.25rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, var(--teal-400) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+    .app-subtitle {
+      color: var(--slate-300);
+      font-size: 1.1rem;
+      max-width: 640px;
+      margin: 0 auto 20px;
+      line-height: 1.65;
+    }
+    /* Feature tags */
+    .feature-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 52px;
+    }
+    .feature-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(20, 184, 166, 0.08);
+      border: 1px solid rgba(20, 184, 166, 0.2);
+      color: var(--teal-400);
+      letter-spacing: 0.02em;
+    }
+    /* Portal Grid */
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .portal-grid-bottom {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .portal-card {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 28px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition-normal);
+    }
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+    .portal-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--teal-500);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5), 0 0 24px rgba(20, 184, 166, 0.12);
+    }
+    .portal-card:hover::before { opacity: 1; }
+    .portal-card.doctor-card:hover { border-color: #38bdf8; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 0 24px rgba(56,189,248,0.12); }
+    .portal-card.analytics-card:hover { border-color: #a78bfa; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 0 24px rgba(167,139,250,0.12); }
+    .portal-card.history-card:hover { border-color: #f472b6; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 0 24px rgba(244,114,182,0.12); }
+
+    .icon-wrapper {
+      width: 76px; height: 76px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      transition: all var(--transition-normal);
+    }
+    .icon-wrapper svg { width: 36px; height: 36px; }
+    .icon-teal { color: var(--teal-400); }
+    .icon-blue { color: #38bdf8; }
+    .icon-purple { color: #a78bfa; }
+    .icon-pink { color: #f472b6; }
+    .icon-mint { color: var(--mint-400); }
+
+    .portal-card:hover .icon-wrapper {
+      transform: scale(1.1);
+    }
+    .portal-card:hover .icon-teal { background: var(--teal-950); border-color: var(--teal-500); box-shadow: var(--glow-teal); }
+    .portal-card:hover .icon-blue { background: rgba(56,189,248,0.1); border-color: rgba(56,189,248,0.4); box-shadow: 0 0 15px rgba(56,189,248,0.3); }
+    .portal-card:hover .icon-purple { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.4); box-shadow: 0 0 15px rgba(167,139,250,0.3); }
+    .portal-card:hover .icon-pink { background: rgba(244,114,182,0.1); border-color: rgba(244,114,182,0.4); box-shadow: 0 0 15px rgba(244,114,182,0.3); }
+    .portal-card:hover .icon-mint { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); }
+
+    .portal-name {
+      font-size: 1.35rem; font-weight: 700;
+      margin-bottom: 10px; color: #ffffff;
+    }
+    .portal-desc {
+      color: var(--slate-300);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    .portal-badge {
+      position: absolute;
+      top: 14px; right: 14px;
+      font-size: 0.65rem; font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .badge-new { background: rgba(20,184,166,0.15); border: 1px solid rgba(20,184,166,0.3); color: var(--teal-400); }
+    .footer {
+      margin-top: 52px;
+      font-size: 0.82rem;
+      color: var(--slate-700);
+    }
+
+    @media (max-width: 900px) {
+      .portal-grid { grid-template-columns: 1fr 1fr; }
+      .portal-grid-bottom { grid-template-columns: 1fr; }
+      .app-title { font-size: 2.25rem; }
+    }
+    @media (max-width: 600px) {
+      .portal-grid { grid-template-columns: 1fr; }
+      .portal-grid-bottom { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gateway-container">
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24"><path d="M19 10.5V20H5V4h9v5.5h5M14 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-7-7m-1 9h-2v2h2v-2m0 4h-2v2h2v-2m3-4h-2v2h2v-2m0 4h-2v2h2v-2m1.5-7c-.8 0-1.5.7-1.5 1.5S17.7 11 18.5 11 20 10.3 20 9.5 19.3 8 18.5 8Z"/></svg>
+      <h2>Queue Cure '26</h2>
+    </div>
+
+    <h1 class="app-title">Smart Clinic Queue Platform</h1>
+    <p class="app-subtitle">Production-grade, real-time clinic management with QR patient tracking, smart AI wait prediction, doctor workflow, and live analytics.</p>
+
+    <div class="feature-tags">
+      <span class="feature-tag">⚡ Real-time WebSockets</span>
+      <span class="feature-tag">📱 QR Code Tracking</span>
+      <span class="feature-tag">🧠 Smart AI Predictions</span>
+      <span class="feature-tag">📊 Live Analytics</span>
+      <span class="feature-tag">🩺 Doctor Portal</span>
+      <span class="feature-tag">🔒 Concurrency Locks</span>
+      <span class="feature-tag">🗂️ Consultation History</span>
+      <span class="feature-tag">🎭 Demo Mode</span>
+    </div>
+
+    <div class="portal-grid">
+      <!-- Receptionist -->
+      <a href="receptionist/index.html" class="glass-card portal-card">
+        <div class="icon-wrapper icon-teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="portal-name">Receptionist</div>
+        <p class="portal-desc">Register patients, call tokens, manage queue, print QR receipts, and run demo simulations.</p>
+      </a>
+
+      <!-- Patient Waiting Room -->
+      <a href="patient/index.html" class="glass-card portal-card">
+        <div class="icon-wrapper icon-mint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+        </div>
+        <div class="portal-name">Waiting Room</div>
+        <p class="portal-desc">Live animated token display, queue progress, voice announcements, and personal token tracker.</p>
+      </a>
+
+      <!-- Doctor Dashboard -->
+      <a href="doctor/index.html" class="glass-card portal-card doctor-card">
+        <span class="portal-badge badge-new">New</span>
+        <div class="icon-wrapper icon-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="portal-name">Doctor Portal</div>
+        <p class="portal-desc">Consultation timer, start/end controls, patient workflow, live queue view, and session logs.</p>
+      </a>
+    </div>
+
+    <div class="portal-grid-bottom">
+      <!-- Analytics Dashboard -->
+      <a href="analytics/index.html" class="glass-card portal-card analytics-card">
+        <span class="portal-badge badge-new">New</span>
+        <div class="icon-wrapper icon-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <div class="portal-name">Analytics Dashboard</div>
+        <p class="portal-desc">Interactive charts — patient volume, wait trends, consultation durations, completion rates, and peak clinic hours. Today / Weekly / Monthly views.</p>
+      </a>
+
+      <!-- Consultation History -->
+      <a href="history/index.html" class="glass-card portal-card history-card">
+        <span class="portal-badge badge-new">New</span>
+        <div class="icon-wrapper icon-pink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div class="portal-name">Consultation History</div>
+        <p class="portal-desc">Searchable patient records with consultation durations, timestamps, status filters, and CSV export.</p>
+      </a>
+    </div>
+
+    <div class="footer">
+      Queue Cure &copy; 2026 &mdash; Built with Real-time WebSockets, QR Tracking, Smart AI Predictions &amp; Chart.js Analytics.
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,434 @@
+/* Header Styles */
+.patient-header {
+  height: 70px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.patient-header .header-logo {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patient-header .header-logo svg {
+  width: 32px;
+  height: 32px;
+  fill: var(--teal-500);
+}
+
+.patient-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.header-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--slate-300);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* Container */
+.patient-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Hero Serving Display Card */
+.hero-serving-card {
+  text-align: center;
+  padding: 40px 48px 32px;
+  background: radial-gradient(circle at center, rgba(13, 148, 136, 0.12) 0%, rgba(30, 41, 59, 0.45) 100%);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), var(--glow-teal);
+}
+.hero-serving-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--teal-400), transparent);
+}
+
+/* Top row: header + last-called timer */
+.hero-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.hero-header {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--teal-400);
+  letter-spacing: 0.2em;
+}
+.last-called-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--slate-700);
+}
+.last-called-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal-500);
+  animation: sync-pulse 2s infinite;
+}
+
+/* Animated Token Number */
+.hero-serving-num {
+  font-family: var(--font-heading);
+  font-size: 6.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  margin-bottom: 12px;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hero-serving-num.pop {
+  animation: token-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes token-pop {
+  0%   { transform: scale(0.85); opacity: 0.6; }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+.hero-serving-name {
+  font-size: 1.5rem;
+  color: var(--slate-100);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.voice-notification-msg {
+  font-size: 0.8rem;
+  color: var(--slate-700);
+  margin-top: 16px;
+  min-height: 1.2em;
+  transition: opacity 0.5s ease;
+}
+
+/* Daily Progress Bar */
+.daily-progress-section {
+  margin-top: 28px;
+  text-align: left;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--slate-300);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.progress-track {
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(to right, var(--teal-600), var(--teal-400));
+  transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.35);
+}
+
+/* Main Grid */
+.patient-main-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.tracker-column, .queue-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Onboarding & Form */
+.btn-track {
+  margin-top: 8px;
+  padding: 14px;
+  font-size: 1rem;
+}
+
+/* Active Tracking View */
+.tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-clear {
+  background: transparent;
+  color: var(--slate-700);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-clear:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--slate-300);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-token-display {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.user-token-label {
+  font-size: 0.85rem;
+  color: var(--slate-300);
+  font-weight: 500;
+}
+
+.user-token-val {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--teal-400);
+}
+
+/* User Status Card */
+.user-status-card {
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.status-label {
+  font-size: 0.85rem;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.status-badge-val {
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+/* Color codes for User Status */
+.status-waiting {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-400);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.status-consultation {
+  background: rgba(20, 184, 166, 0.15);
+  color: var(--teal-400);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.status-completed {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--mint-400);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-skipped {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--rose-400);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* Wait Stats */
+.wait-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.wait-stat-box {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.wait-stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--slate-300);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.wait-stat-val {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.tracker-footer {
+  font-size: 0.85rem;
+  color: var(--slate-300);
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  line-height: 1.5;
+}
+
+/* Right Queue Overview */
+.queue-lists-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 16px;
+}
+
+.queue-sub-panel h4 {
+  font-size: 0.9rem;
+  color: var(--slate-300);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.border-top-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 24px;
+}
+
+/* Upcoming grid (tokens ahead bubble display) */
+.upcoming-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.upcoming-token-bubble {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  transition: all var(--transition-fast);
+}
+
+.upcoming-token-bubble:hover {
+  background: rgba(20, 184, 166, 0.06);
+  border-color: var(--teal-500);
+  transform: translateY(-2px);
+}
+
+.bubble-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--slate-700);
+}
+
+.bubble-val {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--teal-400);
+}
+
+/* History logs */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 0.9rem;
+}
+
+.history-token {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--slate-300);
+}
+
+.history-name {
+  color: var(--slate-100);
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+.empty-list-text {
+  color: var(--slate-700);
+  font-size: 0.9rem;
+  padding: 16px 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .patient-main-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .patient-container {
+    padding: 16px;
+  }
+
+  .hero-serving-num {
+    font-size: 4.5rem;
+  }
+}

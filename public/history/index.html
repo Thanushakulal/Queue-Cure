@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultation History - Queue Cure '26</title>
+  <meta name="description" content="Searchable patient consultation history with filters and export capabilities.">
+  <link rel="stylesheet" href="../shared/common.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="history-header">
+    <div class="header-logo" onclick="window.location.href='../'">
+      <svg viewBox="0 0 24 24"><path d="M19 10.5V20H5V4h9v5.5h5M14 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-7-7m-1 9h-2v2h2v-2m0 4h-2v2h2v-2m3-4h-2v2h2v-2m0 4h-2v2h2v-2m1.5-7c-.8 0-1.5.7-1.5 1.5S17.7 11 18.5 11 20 10.3 20 9.5 19.3 8 18.5 8Z"/></svg>
+      <h1>Queue Cure '26</h1>
+      <span class="header-badge history-badge">History</span>
+    </div>
+    <div class="sync-badge">
+      <div id="sync-dot" class="sync-dot"></div>
+      <span id="sync-text">Live</span>
+    </div>
+  </header>
+
+  <div class="history-container">
+
+    <!-- Search & Filter Bar -->
+    <div class="glass-card search-bar-card">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search-query" placeholder="Search by patient name or token number..." class="search-input">
+        </div>
+        <div class="filter-row">
+          <select id="filter-status" class="filter-select">
+            <option value="">All Status</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="SKIPPED">Skipped</option>
+            <option value="WAITING">Waiting</option>
+            <option value="IN_CONSULTATION">In Consultation</option>
+          </select>
+          <input type="date" id="filter-date" class="filter-date">
+          <button id="btn-search" class="btn-primary btn-search-action">Search</button>
+          <button id="btn-clear-filters" class="btn-secondary">Clear</button>
+          <button id="btn-export-csv" class="btn-secondary btn-export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+      <div class="results-count" id="results-count">Loading records...</div>
+    </div>
+
+    <!-- History Table -->
+    <div class="glass-card table-card">
+      <div class="table-wrapper">
+        <table class="history-table" id="history-table">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Patient Name</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Registered</th>
+              <th>Consult Start</th>
+              <th>Consult End</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr><td colspan="8" class="table-loading">Loading records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
