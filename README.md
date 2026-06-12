@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Queue Cure '26
 
 Queue Cure '26 is a modern, real-time clinic queue management system designed to replace traditional paper-token systems. It features instant synchronization between the receptionist desk and patient waiting room screens.
@@ -267,3 +268,6 @@ Start the application with persistent volumes:
 docker-compose up -d
 ```
 The application will be accessible at [http://localhost:3000](http://localhost:3000), and `queue.db` will persist inside the Docker volume.
+=======
+# Queue-Cure
+>>>>>>> d21eb3955774249d23931475a9374086dc28dc3e
