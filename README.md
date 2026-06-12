@@ -267,7 +267,7 @@ Start the application with persistent volumes:
 ```bash
 docker-compose up -d
 ```
-The application will be accessible at [http://localhost:3000](http://localhost:3000), and `queue.db` will persist inside the Docker volume.
+The application will be accessible at [https://queue-cure-1.onrender.com/](https://queue-cure-1.onrender.com/), and `queue.db` will persist inside the Docker volume.
 =======
 # Queue-Cure
 >>>>>>> d21eb3955774249d23931475a9374086dc28dc3e
